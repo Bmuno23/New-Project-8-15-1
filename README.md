@@ -1,2 +1,2 @@
-# New-Project-8-15-1
+# Snake Game
 Snake game using Javascript html and css
