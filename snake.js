@@ -14,9 +14,16 @@ var snakeY = blockSize * 5;
 var velocityX = 0;
 var velocityY = 0;
 
+//snake body
+var snakeBody = [];
+
 //food
 var foodX;
 var foodY;
+
+var gameOver = false;
+
+//game over
 
 window.onload = function() {
     board = document.getElementById("board");
@@ -28,9 +35,14 @@ window.onload = function() {
     document.addEventListener("keyup", changeDirection);
     //update();
     setInterval(update, 1000/10); //100 milliseconds 
+
+
 }
 
-function update(){
+function update() {
+    if (gameOver){
+        return;
+    }
     context.fillStyle="white";
     context.fillRect(0, 0, board.width, board.height);
 
@@ -38,13 +50,23 @@ function update(){
     context.fillRect(foodX, foodY, blockSize, blockSize);
 
     if (snakeX == foodX && snakeY == foodY){
+        snakeBody.push([foodX, foodY])
         placeFood();
+
+    }
+
+    for (let i = snakeBody.length-1; i > 0; i--){
+        snakeBody[i] = snakeBody[i-1];
     }
 
     context.fillStyle="grey";
     snakeX += velocityX * blockSize;
     snakeY += velocityY * blockSize;
     context.fillRect(snakeX, snakeY, blockSize, blockSize);
+
+    for (let i = 0; i < snakeBody.length; i++) {
+        context.fillRect(snakeBody[i][0], snakeBody[i][1], blockSize, blockSize);
+    }
 
 }
 
@@ -62,7 +84,7 @@ function changeDirection(e) {
         velocityX = -1;
         velocityY = 0;
     }
-    else if (e.code == "ArrowUp" && velocityX != -1){
+    else if (e.code == "ArrowRight" && velocityX != -1){
         velocityX = 1;
         velocityY = 0;
     }
